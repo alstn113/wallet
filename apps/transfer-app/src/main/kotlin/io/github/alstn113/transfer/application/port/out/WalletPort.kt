@@ -1,10 +1,6 @@
 package io.github.alstn113.transfer.application.port.out
 
-import io.github.alstn113.transfer.application.port.out.dto.DepositCommandDto
-import io.github.alstn113.transfer.application.port.out.dto.DepositResultDto
-import io.github.alstn113.transfer.application.port.out.dto.GetTransactionResultDto
-import io.github.alstn113.transfer.application.port.out.dto.WithdrawCommandDto
-import io.github.alstn113.transfer.application.port.out.dto.WithdrawResultDto
+import io.github.alstn113.transfer.application.port.out.dto.*
 
 interface WalletPort {
 
