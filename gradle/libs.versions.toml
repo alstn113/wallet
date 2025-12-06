@@ -6,6 +6,7 @@ spring-cloud = "2024.0.0"
 kotest = "5.9.1"
 mockk = "1.13.17"
 springmockk = "4.0.2"
+hypersistence = "3.13.2"
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
@@ -20,3 +21,4 @@ kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref 
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 springmockk = { module = "com.ninja-squad:springmockk", version.ref = "springmockk" }
+hypersistence = { module = "io.hypersistence:hypersistence-utils-hibernate-71", version.ref = "hypersistence" }

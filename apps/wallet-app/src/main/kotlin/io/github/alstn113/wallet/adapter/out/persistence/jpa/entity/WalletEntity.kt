@@ -1,5 +1,6 @@
 package io.github.alstn113.wallet.adapter.out.persistence.jpa.entity
 
+import io.hypersistence.utils.hibernate.id.Tsid
 import jakarta.persistence.*
 
 @Entity
@@ -9,6 +10,6 @@ class WalletEntity(
 ) : AuditableEntity() {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Tsid
     val id: Long = 0
 }

@@ -2,6 +2,7 @@ package io.github.alstn113.wallet.adapter.out.persistence.jpa.entity
 
 import io.github.alstn113.wallet.domain.TransactionType
 import io.github.alstn113.wallet.domain.WalletTransaction
+import io.hypersistence.utils.hibernate.id.Tsid
 import jakarta.persistence.*
 import java.math.BigDecimal
 
@@ -25,7 +26,7 @@ class WalletTransactionEntity(
 ) : AuditableEntity() {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Tsid
     val id: Long = 0
 
     fun toDomain(): WalletTransaction {
