@@ -28,5 +28,23 @@ data class WalletTransaction private constructor(
                 transactionId = transactionId,
             )
         }
+
+        fun reconstruct(
+            id: Long,
+            walletId: Long,
+            amount: BigDecimal,
+            type: TransactionType,
+            balanceSnapshot: BigDecimal,
+            transactionId: String,
+        ): WalletTransaction {
+            return WalletTransaction(
+                id = id,
+                walletId = walletId,
+                amount = amount,
+                type = type,
+                balanceSnapshot = balanceSnapshot,
+                transactionId = transactionId,
+            )
+        }
     }
 }

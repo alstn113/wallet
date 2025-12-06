@@ -1,6 +1,7 @@
 package io.github.alstn113.wallet.adapter.out.jpa.entity
 
 import io.github.alstn113.wallet.domain.TransactionType
+import io.github.alstn113.wallet.domain.WalletTransaction
 import jakarta.persistence.*
 import java.math.BigDecimal
 
@@ -26,4 +27,15 @@ class WalletTransactionEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0
+
+    fun toDomain(): WalletTransaction {
+        return WalletTransaction.reconstruct(
+            id = this.id,
+            walletId = this.walletId,
+            type = this.type,
+            amount = this.amount,
+            balanceSnapshot = this.balanceSnapshot,
+            transactionId = this.transactionId,
+        )
+    }
 }
