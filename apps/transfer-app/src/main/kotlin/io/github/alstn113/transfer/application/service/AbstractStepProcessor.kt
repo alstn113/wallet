@@ -1,7 +1,5 @@
-package io.github.alstn113.transfer.application.service.step
+package io.github.alstn113.transfer.application.service
 
-import io.github.alstn113.transfer.application.service.ExecutionResult
-import io.github.alstn113.transfer.application.service.ResultClassifier
 import io.github.alstn113.transfer.domain.Transfer
 
 abstract class AbstractStepProcessor(

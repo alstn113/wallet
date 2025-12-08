@@ -1,3 +1,5 @@
 package io.github.alstn113.transfer.application.port.out.dto
 
-data class WithdrawResultDto()
+data class WithdrawResultDto(
+    val id: Long
+)
