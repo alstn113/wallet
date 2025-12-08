@@ -5,8 +5,10 @@ import io.github.alstn113.transfer.application.port.out.WalletPort
 import io.github.alstn113.transfer.application.port.out.dto.DepositCommandDto
 import io.github.alstn113.transfer.application.service.AbstractStepProcessor
 import io.github.alstn113.transfer.application.service.ResultClassifier
+import io.github.alstn113.transfer.application.service.deposit.exception.DepositFailedException
 import io.github.alstn113.transfer.domain.Transfer
 import io.github.alstn113.transfer.domain.TransferState
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Component
 
 @Component
@@ -14,7 +16,7 @@ class DepositProcessor(
     private val resultClassifier: ResultClassifier,
     private val walletPort: WalletPort,
     private val transferRepository: TransferRepository,
-    private val depositCheckProcessor: DepositCheckProcessor,
+    private val depositReconciler: DepositReconciler,
 ) : AbstractStepProcessor(resultClassifier) {
 
     override fun execute(transfer: Transfer) {
@@ -26,19 +28,23 @@ class DepositProcessor(
         walletPort.deposit(command)
     }
 
+    @Transactional
     override fun onSuccess(transfer: Transfer): Transfer {
-        val updatedTransfer = transfer.changeState(TransferState.COMPLETED)
-        return transferRepository.save(updatedTransfer)
+        val nextState = transfer.changeState(TransferState.COMPLETED)
+        return transferRepository.save(nextState)
     }
 
+    @Transactional
     override fun onFailure(transfer: Transfer): Nothing {
-        val updatedTransfer = transfer.changeState(TransferState.DEPOSIT_CHECK_REQUIRED)
-        transferRepository.save(updatedTransfer)
+        val nextState = transfer.changeState(TransferState.DEPOSIT_CHECK_REQUIRED)
+        transferRepository.save(nextState)
 
-        throw IllegalStateException("입금 실패 처리")
+        throw DepositFailedException("입금 실패")
     }
 
     override fun onIndeterminate(transfer: Transfer): Transfer {
+        depositReconciler.reconcile(transfer)
 
+        throw DepositFailedException("도달하지 않는 예외")
     }
 }

@@ -9,13 +9,14 @@ import io.github.alstn113.transfer.application.service.withdraw.exception.Withdr
 import io.github.alstn113.transfer.domain.Transfer
 import io.github.alstn113.transfer.domain.TransferState
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 class WithdrawProcessor(
     private val resultClassifier: ResultClassifier,
     private val walletPort: WalletPort,
     private val transferRepository: TransferRepository,
-    private val withdrawCheckProcessor: WithdrawCheckProcessor,
+    private val withdrawReconciler: WithdrawReconciler,
 ) : AbstractStepProcessor(resultClassifier) {
 
     override fun execute(transfer: Transfer) {
@@ -27,19 +28,21 @@ class WithdrawProcessor(
         walletPort.withdraw(command)
     }
 
+    @Transactional
     override fun onSuccess(transfer: Transfer): Transfer {
-        val updatedTransfer = transfer.changeState(TransferState.WITHDRAW_SUCCESS)
-        return transferRepository.save(updatedTransfer)
+        val nextState = transfer.changeState(TransferState.WITHDRAW_SUCCESS)
+        return transferRepository.save(nextState)
     }
 
+    @Transactional
     override fun onFailure(transfer: Transfer): Nothing {
-        val updatedTransfer = transfer.changeState(TransferState.FAILED)
-        transferRepository.save(updatedTransfer)
+        val nextState = transfer.changeState(TransferState.FAILED)
+        transferRepository.save(nextState)
 
         throw WithdrawFailedException("출금 실패")
     }
 
-    override fun onIndeterminate(transfer: Transfer): Transfer {
-
+    override fun onIndeterminate(transfer: Transfer): Nothing {
+        withdrawReconciler.reconcile()
     }
 }

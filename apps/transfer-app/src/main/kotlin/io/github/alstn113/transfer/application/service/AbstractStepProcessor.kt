@@ -3,7 +3,7 @@ package io.github.alstn113.transfer.application.service
 import io.github.alstn113.transfer.domain.Transfer
 
 abstract class AbstractStepProcessor(
-    private val resultClassifier: ResultClassifier
+    private val resultClassifier: ResultClassifier,
 ) {
 
     fun process(transfer: Transfer): Transfer {
